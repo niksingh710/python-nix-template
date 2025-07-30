@@ -12,6 +12,7 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-darwin" ];
       imports = [ python-flake.flakeModules.default ];
+      debug = true;
       perSystem = { self', pkgs, config, ... }: {
         python-project = {
           name = "python-nix-template-env";
@@ -35,11 +36,15 @@
           inputsFrom = [ config.devShells.uv2nix ];
           packages = with pkgs;[
             pyright
-            python312Packages.python-lsp-server
-            python312Packages.python-lsp-ruff
 
             nil
             nixpkgs-fmt
+
+            (config.python-project.python.withPackages (ps: with ps; [
+              python-lsp-server
+              python-lsp-ruff
+            ]))
+
           ];
         };
       };
