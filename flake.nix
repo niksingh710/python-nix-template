@@ -35,12 +35,12 @@
           inputsFrom = [ config.devShells.uv2nix ];
           packages = with pkgs;[
             pyright
-            python312Packages.python-lsp-server
-            python312Packages.python-lsp-ruff
-
             nil
             nixpkgs-fmt
-          ];
+          ] ++ (config.python-project.python.withPackages (ps: with ps; [
+            python-lsp-server
+            python-lsp-ruff
+          ]));
         };
       };
     };
